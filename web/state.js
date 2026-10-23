@@ -27,6 +27,26 @@
     }
     return fallback;
   }
+  // Presentation only: public logged_in intentionally means authorized AND connected.
+  function accountPresentation(account = {}) {
+    const saved = Boolean(account.telegram_id) || account.stage === 'ready';
+    const raw = account.status || '';
+    let status;
+    if (raw === 'needs_login') status = saved ? 'needs_login' : 'pending';
+    else if (raw === 'connecting' || raw === 'reconnecting') status = raw;
+    else if (raw === 'offline' && saved) status = 'offline';
+    else if (raw === 'waiting' || account.wait?.blocked && (account.wait.category === 'platform' || !['network','authorization'].includes(account.wait.category) && (account.wait.until || account.wait.wait_until || account.wait_until))) status = 'waiting';
+    else if (account.logged_in === true && account.connected === true) status = 'online';
+    else if (raw === 'authorizing' || ['code', 'password'].includes(account.stage)) status = 'authorizing';
+    else status = saved ? 'offline' : 'pending';
+    const labels = {online:'在线',offline:'离线',connecting:'连接中',reconnecting:'重连中',waiting:'等待平台允许',needs_login:'需要重新登录',pending:'待登录',authorizing:'验证中'};
+    let loginStage = ['phone','code','password'].includes(account.stage) ? account.stage : 'phone';
+    if (status === 'online') loginStage = 'ready';
+    else if (['offline','connecting','reconnecting'].includes(status) || status === 'waiting' && saved) loginStage = 'connection';
+    else if (status === 'needs_login') loginStage = 'phone';
+    const actionLabel = {online:'重新连接',offline:'重新连接',connecting:'连接中',reconnecting:'重连中',waiting:'查看连接',needs_login:'重新登录',pending:'登录',authorizing:'继续验证'}[status];
+    return {status,label:labels[status],kind:status==='online'?'good':['connecting','reconnecting'].includes(status)?'blue':status==='offline'?'neutral':'warning',actionLabel,actionDisabled:['connecting','reconnecting'].includes(status),loginStage,needsLogin:['pending','needs_login','authorizing'].includes(status)};
+  }
   function createUiState() {
     return {
       snapshot:{revision:-1,accounts:[],settings:{},tasks:[],events:[]}, accountId:'', page:'listener', chat:null, drafts:{}, configs:{}, epoch:0, requests:{}, sendAttempts:{}, invite:{people:[],target:'',consent:false,step:1,task:null},
@@ -98,5 +118,5 @@
       canConfirmClear(task, form, eventType) { return Boolean(eventType==='click'&&task&&task.account_id===this.accountId&&this.account()?.name===form.name&&form.backup&&form.scope&&(task.confirmation_token||task.token)&&task.expires_at&&Date.parse(task.expires_at)>Date.now()); }
     };
   }
-  return {createUiState,escapeHtml,mediaFilename};
+  return {createUiState,escapeHtml,mediaFilename,accountPresentation};
 });
