@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>TG 多账号工作台</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/state.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="#" aria-label="TG 工作台首页"><span class="brand-mark">➤</span><strong>TG 工作台</strong><span class="version">V3</span></a>
+    <div class="global-status"><span id="connection-status" class="badge warning">正在连接本机</span><span id="account-count" class="muted">读取账号中</span></div>
+    <div class="global-actions"><button type="button" data-action="toggle-global" id="global-pause">Ⅱ 暂停全部自动化</button><button type="button" data-action="notifications" aria-label="最近通知">♧</button><button type="button" data-action="lock" aria-label="锁定面板">♙ 锁定</button></div>
+  </header>
+  <div class="workspace">
+    <nav class="primary-nav" aria-label="主导航">
+      <button type="button" class="nav-item" data-page="chat"><span class="icon">◯</span><span>聊天</span></button>
+      <button type="button" class="nav-item active" data-page="listener"><span class="icon">◉</span><span>监听</span></button>
+      <button type="button" class="nav-item" data-page="contacts"><span class="icon">♧</span><span>联系人</span></button>
+      <button type="button" class="nav-item" data-page="groups"><span class="icon">▣</span><span>群组</span></button>
+      <button type="button" class="nav-item" data-page="tasks"><span class="icon">☑</span><span>任务中心</span></button>
+      <button type="button" class="nav-item" data-page="accounts"><span class="icon">♙</span><span>账号管理</span></button>
+      <button type="button" class="nav-item nav-bottom" data-page="settings"><span class="icon">⚙</span><span>设置</span></button>
+    </nav>
+    <aside class="account-sidebar" aria-label="账号选择">
+      <div class="sidebar-heading"><h2>账号</h2><button type="button" class="icon-button" data-action="add-account" aria-label="添加账号">＋</button></div>
+      <div id="account-list" class="account-list"><p class="muted small">正在读取本机账号…</p></div>
+      <div class="sidebar-footer"><span class="status-dot"></span> 会话与配置保存在本机<br><span class="small muted">切换账号不会停止后台监听</span></div>
+    </aside>
+    <main class="main" id="main"><div id="identity-bar" class="identity-bar"></div><div id="connection-strip" class="connection-strip" hidden></div><div id="page" aria-live="polite"><div class="empty">正在连接本机工作台…</div></div></main>
+  </div>
+  <div id="modal-root"></div>
+  <div id="toast-region" class="toast-region" role="status" aria-live="polite"></div>
+</body>
+</html>
