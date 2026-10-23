@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python 3.14、Telethon 1.45、SQLite、原生 HTML/CSS/JS、本机 HTTP。
 
-**Spec:** <user-home>/Documents/Codex/2026-10-22/wo/outputs/TG工作台-V0.2需求与设计/TG多账号工作台-完整需求V0.2.md；同目录详细界面设计及四张 PNG。
+**Spec:** `docs/source/requirements.md`、`docs/source/design.md` 与 `docs/source/` 的四张虚构数据设计图。
 
 ## Global Constraints
 

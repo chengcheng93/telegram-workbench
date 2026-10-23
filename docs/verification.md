@@ -32,7 +32,7 @@
 | 3. 收发与失败反馈 | 聊天模块测试文字、回复、图片/文件、上传取消、发送状态、明确失败与未知结果、编辑/撤回权限。真实平台与媒体收发待用户测试。 |
 | 4. AI 草稿与人工接管 | `test_ai.py`：默认关闭、数据同意、受限上下文、超时、接管使在途草稿失效；采用仅写草稿，不发送。真实供应商请求未执行。 |
 | 5. 删除联系人范围 | `test_contacts.py`、`test_tasks.py`：只删除所选账号指定对象，不调用拉黑/删聊天/踢群。 |
-| 6. 邀请真实分类 | `group_invites.py`、`test_invite_rpc.py`：成员预检和事后核实、权限、隐私、等待；接口无异常不等于加入。真实群权限待验证。 |
+| 6. 邀请真实分类 | `group_invites.py`、`test_invite_rpc.py`：成员预检和事后核实、权限、隐私、等待；接口无异常不等于加入。一个真实群的权限读取已验证；实际邀请未执行。 |
 | 7. 暂停重启不重放 | RPC 前持久 journal；重启遗留在途转未核实。任务 outbox 所有权、固定 request_id、5xx 不确定写入、只读核实与合法失败重试有回归。 |
 | 8. 预览与明确确认 | 手动五类型任务及 AI 任务草稿均走账号/对象/正文或目标群预览；确认 token 绑定账号、身份、范围和有效期。 |
 | 9. 凭据边界 | 快照、日志、AI 请求、导出不含凭据；loopback/Host/Origin/token/面板锁检查；锁后 HTTP、媒体迟到结果有世代栅栏。 |
@@ -72,11 +72,18 @@
 在项目目录运行：
 
 ```sh
-../../work/telegram-workbench-runtime/venv/bin/python -B -m unittest discover -s tests -q
+.venv/bin/python -B -m unittest discover -s tests -q
 node --test tests/*.test.cjs
 node --check web/app.js
 node --check web/state.js
-../../work/telegram-workbench-runtime/venv/bin/python -m pip check
+.venv/bin/python -m pip check
 ```
 
-完整需求、计划、接口与源码随本地交付保存。独立审查、TDD日志和浏览器原始证据保留在本次任务的 `work/multiaccount` 中，不包含真实登录凭据。
+完整需求、计划、接口与源码随仓库保存。开发期独立审查、TDD日志和浏览器原始证据保留在开发机，未随公开仓库上传；上面列出的 Python / Node 验证可从仓库重新执行。
+
+## 公开发布安装核验（2026-10-23）
+
+- 公开工程使用脱敏快照和独立 Git 历史；运行数据、凭据、真实账号标识和本机个人目录没有进入发布内容。四张原设计图为虚构数据，生成说明保存在 `source/design-prompts.txt`。
+- 在公开工程中新建 `.venv`，使用 Python 3.14 安装锁定依赖，依赖检查通过；没有借用已登录账号的运行数据库。
+- 使用独立空数据目录启动后台（测试使用 `--no-open`，避免打断前台页面）。空账号面板、未配置 API 的初始状态、静态资源和鉴权正常；重复启动复用已有服务，明确退出后进程结束且实例描述文件删除。
+- 本次安装核验没有登录真实 Telegram 账号、发送消息或执行联系人操作。新手步骤见 [快速上手](getting-started.md)，错误处理见 [常见问题](troubleshooting.md)。
