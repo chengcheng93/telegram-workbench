@@ -516,3 +516,5 @@ pre { max-width: 100%; max-height: 260px; margin: 10px 0; padding: 12px; overflo
 button.stat { display: block; width: 100%; text-align: left; white-space: normal; font-weight: 400; }
 .stat .hint { display: block; }
 button.stat:hover { border-color: #8acdc4; background: #f8fcfb; }
+
+.sidebar-footer #browser-access { display: block; width: 100%; margin-top: 10px; }
